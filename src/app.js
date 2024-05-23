@@ -3,20 +3,7 @@ const app = express();
 const PORT = 3000;
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-const customers = [
-    {
-        name: 'John Doe',
-        industry: 'IT',
-    },
-    {
-        name: 'Jane Doe',
-        industry: 'Finance',
-    },
-    {
-        name: 'Kyle',
-        industry: 'Health',
-    }
-];
+
 
 app.get('/api/customers', (req, res) => {
     res.send({"customers": customers})
