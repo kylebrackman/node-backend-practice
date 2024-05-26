@@ -24,8 +24,8 @@ app.get('/api/notes', async (req, res) => {
     try {
         const result = await Note.find();
         res.send({ "notes": result });
-    } catch(e) {
-        res.status(500).json({ error: e.message})
+    } catch (e) {
+        res.status(500).json({ error: e.message })
     }
 });
 
@@ -33,12 +33,26 @@ app.get('/api/customers', (req, res) => {
     res.send({ "customers": customer })
 });
 
+app.get('/api/notes/:id', async(req, res) => {
+    res.json({ 
+        requestParams: req.params,
+        requestQuery: req.query
+    });
+});
+
 app.get('/', (req, res) => {
     res.send("Welcome!");
 });
 
-app.post('/', (req, res) => {
-    res.send('This is a post request.');
+app.post('/api/notes', async (req, res) => {
+    console.log(req.body);
+    const note = new Note(req.body);
+    try {
+        await note.save();
+        res.status(201).json({note});
+    } catch(e) {
+        res.status(400).json({ error: e.message });
+    }
 });
 
 app.post('/api/customers', (req, res) => {
