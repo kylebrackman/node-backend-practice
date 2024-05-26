@@ -4,7 +4,7 @@ const Note = require('./models/note');
 
 mongoose.set('strictQuery', false);
 const app = express();
-if(process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 const PORT = process.env.PORT || 3000;
@@ -16,28 +16,17 @@ const CONNECTION = process.env.CONNECTION;
 
 const note = new Note({
     date: new Date(),
-    title: 'First Note',
+    title: 'Second Note',
     content: 'This is the first note.'
-})
-
-const customer = [
-    {
-        name: 'John Doe',
-        industry: 'IT',
-    },
-    {
-        name: 'Jane Doe',
-        industry: 'Finance',
-    },
-    {
-        name: 'Kyle',
-        industry: 'Health',
-    }
-];
+});
 
 app.get('/api/notes', async (req, res) => {
-    const notes = await Note.find();
-    res.send(notes);
+    try {
+        const result = await Note.find();
+        res.send({ "notes": result });
+    } catch(e) {
+        res.status(500).json({ error: e.message})
+    }
 });
 
 app.get('/api/customers', (req, res) => {
@@ -45,7 +34,7 @@ app.get('/api/customers', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.send(note);
+    res.send("Welcome!");
 });
 
 app.post('/', (req, res) => {
@@ -69,8 +58,8 @@ const start = async () => {
                 'App listening on port ' + PORT
             )
         });
-    } catch (error) {
-        console.error(error.message);
+    } catch (e) {
+        console.error(e.message);
     };
 }
 
