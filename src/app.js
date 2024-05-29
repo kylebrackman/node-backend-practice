@@ -33,11 +33,20 @@ app.get('/api/customers', (req, res) => {
     res.send({ "customers": customer })
 });
 
-app.get('/api/notes/:id', async(req, res) => {
-    res.json({ 
-        requestParams: req.params,
-        requestQuery: req.query
-    });
+app.get('/api/notes/:id', async (req, res) => {
+    try {
+        const noteId = req.params.id;
+        // console.log(noteId);
+        const note = await Note.findById(noteId);
+        console.log(note);
+        if (!note) {
+            res.status(404).json({ error: 'Note not found.' });
+        } else {
+            res.json({ note });
+        }
+    } catch (e) {
+        res.status(500).json({ error: 'Something went wrong.' });
+    }
 });
 
 app.get('/', (req, res) => {
@@ -49,8 +58,8 @@ app.post('/api/notes', async (req, res) => {
     const note = new Note(req.body);
     try {
         await note.save();
-        res.status(201).json({note});
-    } catch(e) {
+        res.status(201).json({ note });
+    } catch (e) {
         res.status(400).json({ error: e.message });
     }
 });
