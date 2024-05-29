@@ -36,7 +36,7 @@ app.get('/api/customers', (req, res) => {
 app.get('/api/notes/:id', async (req, res) => {
     try {
         const noteId = req.params.id;
-        // console.log(noteId);
+        console.log(noteId);
         const note = await Note.findById(noteId);
         console.log(note);
         if (!note) {
@@ -44,6 +44,26 @@ app.get('/api/notes/:id', async (req, res) => {
         } else {
             res.json({ note });
         }
+    } catch (e) {
+        res.status(500).json({ error: 'Something went wrong.' });
+    }
+});
+
+app.put('/api/notes/:id', async (req, res) => {
+    try {
+        const noteId = req.params.id;
+        const result = await Note.replaceOne({_id: noteId}, req.body)
+        res.json({ updatedCount: result.modifiedCount })
+    } catch (e) {
+        res.status(500).json({ error: 'Something went wrong.' });
+    }
+});
+
+app.delete('/api/notes/:id', async (req, res) => {
+    try {
+        const noteId = req.params.id;
+        const result = await Note.deleteOne( {_id: noteId}, req.body )
+        res.json({ deletedCount: result.deletedCount }); 
     } catch (e) {
         res.status(500).json({ error: 'Something went wrong.' });
     }
