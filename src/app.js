@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Note = require('./models/note');
+const cors = require('cors');
 
 mongoose.set('strictQuery', false);
 const app = express();
@@ -8,6 +9,8 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 const PORT = process.env.PORT || 3000;
+
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
