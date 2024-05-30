@@ -84,6 +84,7 @@ app.post('/api/notes', async (req, res) => {
         res.status(201).json({ note });
     } catch (e) {
         res.status(400).json({ error: e.message });
+        console.log(e.message);
     }
 });
 
